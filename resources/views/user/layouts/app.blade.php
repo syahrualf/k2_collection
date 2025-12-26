@@ -149,6 +149,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <script src="{{ asset('sweetalert2/dist/sweetalert2.all.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
+
 
     @if (session('success'))
         <script>

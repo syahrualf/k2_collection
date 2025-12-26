@@ -8,6 +8,7 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaqController;
 
 Route::get('/', [WebController::class, 'home'])->name('home');
 Route::get('/tentangKami', [WebController::class, 'tentang'])->name('tentangKami');
@@ -17,11 +18,9 @@ Route::get('/detailProduk/{slug}', [WebController::class, 'detailProduk'])->name
 Route::get('/pesanProduk', [WebController::class, 'pesanProduk'])->name('pesanProduk');
 Route::get('/cariProduk', [ProdukController::class, 'search'])->name('cariProduk');
 
-
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'loginProses'])->name('loginProses');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-Route::post('/chat', [ChatbotController::class, 'ask'])->name('chat');
 
 Route::middleware('cekLogin')->group(function () {
 
@@ -41,4 +40,12 @@ Route::middleware('cekLogin')->group(function () {
     Route::get('produk/edit{id}', [ProdukController::class, 'edit'])->name('produkEdit');
     Route::post('produk/update{id}', [ProdukController::class, 'update'])->name('produkUpdate');
     Route::delete('produk/destroy{id}', [ProdukController::class, 'destroy'])->name('produkDestroy');
+
+    Route::get('faq', [FaqController::class, 'index'])->name('faq');
+    Route::get('faq/create', [FaqController::class, 'create'])->name('faqCreate');
+    Route::post('faq/store', [FaqController::class, 'store'])->name('faqStore');
+    Route::get('faq/edit{id}', [FaqController::class, 'edit'])->name('faqEdit');
+    Route::post('faq/update{id}', [FaqController::class, 'update'])->name('faqUpdate');
+    Route::delete('faq/destroy{id}', [FaqController::class, 'destroy'])->name('faqDestroy');
+
 });

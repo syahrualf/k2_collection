@@ -6,7 +6,7 @@
             <!-- Header -->
             <div class="mb-10 border-b border-zinc-800 pb-4">
                 <h2 class="text-3xl font-semibold tracking-tight">Detail Produk</h2>
-                <p class="text-sm text-gray-400 mt-1">Cool Cloth <span
+                <p class="text-sm text-gray-400 mt-1">K2 Collection <span
                         class="text-violet-600 font-medium">#{{ $produk->slug }}</span> · {{ now()->format('F d, Y') }}</p>
             </div>
 

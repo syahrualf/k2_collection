@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Cool Cloth | {{ $title }}</title>
+    <title>K2 Collection | {{ $title }}</title>
       <link rel="icon" href="{{ asset('images/favicon.jpg') }}" type="image/png" />
     <link rel="shortcut icon" href="{{ asset('images/favicon.jpg') }}" type="image/png" />
     <link href="{{asset('sbadmin2/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">

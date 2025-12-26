@@ -14,11 +14,11 @@
             <span>Dashboard</span>
         </a>
     </li>
-     <li class="nav-item {{ $menuAdmin ?? ''}} ">
-      <a class="nav-link py-2" href="{{ route ('user') }}">
-        <i class="fas fa-user"></i>
-        <span>Akun Admin</span>
-      </a>
+    <li class="nav-item {{ $menuAdmin ?? ''}} ">
+        <a class="nav-link py-2" href="{{ route('user') }}">
+            <i class="fas fa-user"></i>
+            <span>Akun Admin</span>
+        </a>
     </li>
 
     <!-- Menu Section -->
@@ -28,18 +28,25 @@
     </div>
 
     <li class="nav-item {{ $menuKategori ?? '' }} ">
-        <a class="nav-link py-2" href="{{ route ('kategori') }}">
+        <a class="nav-link py-2" href="{{ route('kategori') }}">
             <i class="fas fa-tags"></i>
             <span>Kategori</span>
         </a>
     </li>
 
     <li class="nav-item {{ $menuProduk ?? '' }}">
-        <a class="nav-link py-2" href="{{ route ('produk') }}">
+        <a class="nav-link py-2" href="{{ route('produk') }}">
             <i class="fas fa-tshirt"></i>
             <span>Produk</span>
         </a>
     </li>
+    <li class="nav-item {{ $menuFaq ?? '' }}">
+        <a class="nav-link py-2" href="{{ route('faq') }}">
+            <i class="fas fa-question-circle"></i>
+            <span>FAQ</span>
+        </a>
+    </li>
+
 
     <hr class="sidebar-divider my-0">
 

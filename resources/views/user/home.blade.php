@@ -120,7 +120,9 @@
   </div>
   <!-- Chatbox -->
   <div id="chatbox"
-    class="fixed bottom-20 right-6 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 hidden flex-col overflow-hidden z-50">
+    class="fixed bottom-20 right-6 bg-white rounded-xl shadow-2xl border border-gray-200 hidden flex-col overflow-hidden z-50"
+    style="width: 420px;">
+
     <!-- Header -->
     <div class="bg-violet-600 text-white px-4 py-3 flex justify-between items-center">
       <h3 class="font-semibold">K2 Chatbot</h3>
@@ -128,6 +130,18 @@
         ✕
       </button>
     </div>
+    <!-- Quick Replies -->
+    <div id="quickReplies" class="p-3 flex gap-2 flex-wrap">
+      <button class="qr-btn bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-full text-xs"
+        onclick="sendQuick('produk apa saja')">Ada produk apa saja</button>
+
+      <button class="qr-btn bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-full text-xs"
+        onclick="sendQuick('Buka jam berapa?')">Buka jam berapa?</button>
+
+      <button class="qr-btn bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-full text-xs"
+        onclick="sendQuick('Apakah bisa order satuan?')">Apakah bisa order satuan?</button>
+    </div>
+
     <!-- Chat Messages -->
     <div id="messages" class="p-4 h-80 overflow-y-auto space-y-3 text-sm bg-gray-50"></div>
     <!-- Input -->
@@ -206,42 +220,124 @@
     const input = document.getElementById("chatInput");
     const messages = document.getElementById("messages");
 
+    // BUKA CHAT
     chatbotBtn.onclick = () => {
       chatbox.classList.remove("hidden");
       chatbotBtn.classList.add("hidden");
     };
 
+    // TUTUP CHAT
     closeChat.onclick = () => {
       chatbox.classList.add("hidden");
       chatbotBtn.classList.remove("hidden");
     };
 
-    function addMessage(text, sender) {
-      const msg = document.createElement("div");
-      msg.className = sender === "user" ? "text-right" : "text-left";
-
-      msg.innerHTML = `
-      <div class="inline-block px-3 py-2 rounded-lg ${sender === " user" ? "bg-violet-600 text-white" : "bg-white border"}">
-        ${text}
-      </div>
-      `;
-      messages.appendChild(msg);
-      messages.scrollTop = messages.scrollHeight;
+    // QUICK REPLY
+    function sendQuick(text) {
+      addMessage(text, "user");
+      processMessage(text);
     }
-
-    async function sendMessage() {
+    // KIRIM MANUAL
+    sendBtn.addEventListener("click", () => {
       let message = input.value.trim();
       if (!message) return;
 
       addMessage(message, "user");
       input.value = "";
+
+      processMessage(message);
+    });
+    // KIRIM PAKAI ENTER
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault(); 
+        sendBtn.click(); 
+      }
+    });
+
+    // PROSES PESAN
+    async function processMessage(message) {
+      // Loading bubble
+      addMessage("Sebentar ya...", "bot");
+
+      const res = await fetch("/api/chatbot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      // Hapus loading
+      messages.lastChild.remove();
+      // tampilkan jawaban bot
+      addMessage(data.answer ?? "Maaf, saya belum punya jawabannya 😊", "bot");
+      // RENDER QUICK REPLIES JIKA ADA
+      if (data.quick_replies && data.quick_replies.length > 0) {
+        const qrElements = renderQuickReplies(data.quick_replies);
+        messages.appendChild(qrElements);
+      }
+
+      // RENDER FAQ SUGGESTION
+      if (data.faq_suggestions && data.faq_suggestions.length > 0) {
+        const faqContainer = renderFaqSuggestions(data.faq_suggestions);
+        messages.appendChild(faqContainer);
+      }
+      // scroll ke bawah
+      messages.scrollTop = messages.scrollHeight;
+    }
+    // TAMBAH CHAT BUBBLE
+    function addMessage(text, sender) {
+      const msg = document.createElement("div");
+      msg.className = sender === "user" ? "text-right" : "text-left";
+
+      msg.innerHTML = `
+          <div class="inline-block px-3 py-2 rounded-lg ${sender === "user"
+          ? "bg-violet-600 text-white"
+          : "bg-white border"
+        }">
+              ${text}
+          </div>
+        `;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
     }
 
-    sendBtn.onclick = sendMessage;
+    // RENDER TOMBOL QUICK REPLY
+    function renderQuickReplies(quickReplies) {
+      const container = document.createElement("div");
+      container.classList.add("flex", "gap-2", "flex-wrap", "mt-2");
 
-    input.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") sendMessage();
-    });
+      quickReplies.forEach(q => {
+        let btn = document.createElement("button");
+        btn.textContent = q.label;
+        btn.className =
+          "qr-btn bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-full text-xs";
+        btn.onclick = () => sendQuick(q.value);
+
+        container.appendChild(btn);
+      });
+
+      return container;
+    }
+    // RENDER REKOMENDASI FAQ
+    function renderFaqSuggestions(faqList) {
+      const wrap = document.createElement("div");
+      wrap.classList.add("mt-2", "flex", "flex-wrap", "gap-2");
+
+      faqList.forEach(f => {
+        const btn = document.createElement("button");
+        btn.textContent = f.label;
+        btn.className =
+          "bg-blue-100 hover:bg-blue-200 px-2 py-1 rounded-full text-xs border border-blue-300";
+        btn.onclick = () => sendQuick(f.value);
+
+        wrap.appendChild(btn);
+      });
+
+      return wrap;
+    }
 
   </script>
 @endsection
