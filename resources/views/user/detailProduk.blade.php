@@ -35,12 +35,18 @@
                                 class="text-gray-300">{{ $produk->kategori->nama_kategori ?? '-' }}</span>
                         </p>
                     </div>
+                    @php
+                        $produkUrl = url('/detailProduk/' . $produk->slug);
+                        $text = "Halo admin, saya ingin menanyakan produk:\n"
+                            . "Nama: {$produk->nama}\n"
+                            . "Link: {$produkUrl}";
+                    @endphp
 
-                    <!-- Tombol Beli -->
-                    <a href="https://wa.me/62859175727576?text=Halo%20saya%20ingin%20menanyakan%20pesanan%20#{{ $produk->slug }}"
+                    <a href="https://wa.me/62859175727576?text={{ urlencode($text) }}"
                         class="mt-8 bg-violet-600 hover:bg-violet-700 transition-all duration-300 text-white py-3 rounded-lg text-base font-semibold shadow-md block text-center">
                         Hubungi Admin
                     </a>
+
                 </div>
 
             </div>

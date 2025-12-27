@@ -120,8 +120,8 @@
   </div>
   <!-- Chatbox -->
   <div id="chatbox"
-    class="fixed bottom-20 right-6 bg-white rounded-xl shadow-2xl border border-gray-200 hidden flex-col overflow-hidden z-50"
-    style="width: 420px;">
+  class="fixed bottom-20 right-6 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 hidden flex-col overflow-hidden z-50">
+
 
     <!-- Header -->
     <div class="bg-violet-600 text-white px-4 py-3 flex justify-between items-center">
